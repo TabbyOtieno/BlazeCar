@@ -12,17 +12,17 @@ def hello_world():
 
 @app.route('/home')
 def home():
-    return render_template('home.html')
+    return render_template('templates/home.html')
 
 
 @app.route('/about')
 def about():
-    return render_template('about.html')
+    return render_template('templates/about.html')
 
 
 @app.route('/contact')
 def contact():
-    return render_template('contact.html')
+    return render_template('templates/contact.html')
 
 
 @app.route('/register_car', methods=['GET', 'POST'])
@@ -45,16 +45,17 @@ def register():
 
         # execute query using a tuple
         try:
-            crs.execute(sql, (car_type, make, vregno, drvname, drvcntct, year, drvlicense))
+            crs.execute(sql, (car_type, make, vregno,
+                              drvname, drvcntct, year, drvlicense))
             # enforce the values
             con.commit()
-            return render_template('register_car.html', msg="Successfully saved")
+            return render_template('templates/register_car.html', msg="Successfully saved")
         except:
             # revert to previous page in case of corrupt values
             con.rollback()
-            return render_template('register_car.html', msg="Failed")
+            return render_template('templates/register_car.html', msg="Failed")
     else:
-        return render_template('register_car.html')
+        return render_template('templates/register_car.html')
 
 
 @app.route('/search_car', methods=['GET', 'POST'])
@@ -68,7 +69,8 @@ def search():
 
         # create a cursor to establish connection to the db and to actually process the query
         cur = con.cursor()
-        searchquery = "SELECT * FROM cars where VehicleRegNo = %s"  # we use %s here coz this is where sql injection can occur
+        # we use %s here coz this is where sql injection can occur
+        searchquery = "SELECT * FROM cars where VehicleRegNo = %s"
 
         # execute query
         cur.execute(searchquery, vregno)
@@ -79,7 +81,7 @@ def search():
             rows = cur.fetchall()  # gets actual array in a list format
             return render_template('search_car.html', rows=rows)
     else:
-        return render_template('search_car.html')
+        return render_template('templates/search_car.html')
 
 
 @app.route('/view_cars')
@@ -95,10 +97,10 @@ def view():
     curs.execute(viewqry)
 
     if curs.rowcount == 0:
-        return render_template("view_cars.html", ms="No records found")
+        return render_template("templates/view_cars.html", ms="No records found")
     else:
         rows = curs.fetchall()
-        return render_template('view_cars.html', rows=rows)
+        return render_template('templates/view_cars.html', rows=rows)
 
 
 @app.route('/earnings', methods=['GET', 'POST'])
@@ -116,13 +118,13 @@ def earnings():
             crs.execute(sql, (vreg, amnt))
             # enforce the values
             con.commit()
-            return render_template('earnings.html', msg="Successfully saved")
+            return render_template('templates/earnings.html', msg="Successfully saved")
         except:
             # revert to previous page in case of corrupt values
             con.rollback()
-            return render_template('earnings.html', msg="Failed")
+            return render_template('templates/earnings.html', msg="Failed")
     else:
-        return render_template('earnings.html')
+        return render_template('templates/earnings.html')
 
 
 @app.route('/ttlearnings', methods=['POST', 'GET'])
@@ -136,7 +138,8 @@ def ttlearnings():
 
         # create a cursor to establish connection to the db and to actually process the query
         cur = con.cursor()
-        searchquery = "SELECT * FROM earnings where VehicleRegNo = %s"  # we use %s here coz this is where sql injection can occur
+        # we use %s here coz this is where sql injection can occur
+        searchquery = "SELECT * FROM earnings where VehicleRegNo = %s"
 
         # execute query
         cur.execute(searchquery, vregno)
@@ -145,9 +148,9 @@ def ttlearnings():
             return render_template('ttlearnings.html', ms="No Records found")
         else:
             rows = cur.fetchall()  # gets actual array in a list format
-            return render_template('ttlearnings.html', rows=rows)
+            return render_template('templates/ttlearnings.html', rows=rows)
     else:
-        return render_template('ttlearnings.html')
+        return render_template('templates/ttlearnings.html')
 
 
 if __name__ == '__main__':
