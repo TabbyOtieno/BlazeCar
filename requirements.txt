@@ -95,7 +95,7 @@ virtualenv==20.0.10
 wcwidth==0.1.8
 WeasyPrint==48
 webencodings==0.5.1
-Werkzeug==0.15.4
+Werkzeug==0.15.5
 widgetsnbextension==3.5.1
 wrapt==1.11.2
 WTForms==2.2.1
